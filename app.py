@@ -14,7 +14,7 @@ load_dotenv()
 
 
 machine = TocMachine(
-    states=["user", "state1", "state2", "homepage"],
+    states=["user", "state1", "state2", "homepage", "recommend", "showMember"],
     transitions=[
         {
             "trigger": "advance",
@@ -34,7 +34,19 @@ machine = TocMachine(
             "dest": "homepage",
             "conditions": "is_going_to_homepage",
         },
-        {"trigger": "go_back", "source": ["state1", "state2", "homepage"], "dest": "user"},
+        {
+            "trigger": "advance",
+            "source": "homepage",
+            "dest": "recommend",
+            "conditions": "is_going_to_recommend",
+        },
+        {
+            "trigger": "advance",
+            "source": "recommend",
+            "dest": "showMember",
+            "conditions": "is_going_to_showMember",
+        },
+        {"trigger": "go_back", "source": ["state1", "state2", "homepage", "recommend", "showMember"], "dest": "user"},
     ],
     initial="user",
     auto_transitions=False,
@@ -110,7 +122,7 @@ def webhook_handler():
         print(f"REQUEST BODY: \n{body}")
         response = machine.advance(event)
         if response == False:
-            send_text_message(event.reply_token, "Not Entering any State")
+            send_text_message(event.reply_token, "請輸入上述指令")
 
     return "OK"
 
