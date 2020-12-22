@@ -1,6 +1,6 @@
 from transitions.extensions import GraphMachine
 
-from utils import send_text_message, send_button_message
+from utils import send_text_message, send_button_message, send_recommend_image_carousel, send_show_message
 from linebot.models import MessageTemplateAction
 
 class TocMachine(GraphMachine):
@@ -16,6 +16,13 @@ class TocMachine(GraphMachine):
         return text.lower() == "go to state2"
 
     def is_going_to_homepage(self, event):
+        return True
+
+    def is_going_to_recommend(self, event):
+        text = event.message.text
+        return text.lower() == "人氣成員介紹"
+
+    def is_going_to_showMember(self, event):
         return True
 
     def on_enter_state1(self, event):
@@ -40,13 +47,13 @@ class TocMachine(GraphMachine):
 
     def on_enter_homepage(self, event):
         print("I'm entering hompage")
-        userid=event.source.user_id
-        title='歡迎來到Hololive小工具！！'
-        text='請選擇服務項目'
-        action=[
+        userid = event.source.user_id
+        title = '歡迎來到Hololive小工具！！'
+        text = '請選擇服務項目'
+        action = [
             MessageTemplateAction(
-                label='十大成員介紹',
-                text='十大成員介紹'
+                label='人氣成員介紹',
+                text='人氣成員介紹'
             ),
             MessageTemplateAction(
                 label='成員介紹',
@@ -57,7 +64,23 @@ class TocMachine(GraphMachine):
                 text='實況中'
             )
         ]
-        url='https://pgw.udn.com.tw/gw/photo.php?u=https://uc.udn.com.tw/photo/2020/10/27/1/8845618.png&s=Y&x=36&y=0&sw=1906&sh=1271&sl=W&fw=1050'
+        url = 'https://i.imgur.com/y99Dsat.jpg'
         send_button_message(userid, url, title, text, action)
 
+
+    def on_enter_recommend(self, event):
+        print("I'm entering recommend")
+        userid = event.source.user_id
+        send_recommend_image_carousel(userid)
+        print("success")
+
+    def on_enter_showMember(self, event):
+        print("I'm entering showMember")
+        userid=event.source.user_id
+        memberName = event.message.text
+        #try:
+        send_show_message(userid, memberName)
+        #except:
         self.go_back()
+        #self.go_back()
+        
