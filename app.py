@@ -14,20 +14,8 @@ load_dotenv()
 
 
 machine = TocMachine(
-    states=["user", "state1", "state2", "homepage", "recommend", "showMember"],
+    states=["user", "homepage", "recommend", "showMember", "introduce", "living"],
     transitions=[
-        {
-            "trigger": "advance",
-            "source": "user",
-            "dest": "state1",
-            "conditions": "is_going_to_state1",
-        },
-        {
-            "trigger": "advance",
-            "source": "user",
-            "dest": "state2",
-            "conditions": "is_going_to_state2",
-        },
         {
             "trigger": "advance",
             "source": "user",
@@ -36,17 +24,35 @@ machine = TocMachine(
         },
         {
             "trigger": "advance",
-            "source": "homepage",
+            "source": ["homepage","showMember"],
             "dest": "recommend",
             "conditions": "is_going_to_recommend",
         },
         {
             "trigger": "advance",
-            "source": "recommend",
+            "source": ["recommend", "introduce"],
             "dest": "showMember",
             "conditions": "is_going_to_showMember",
         },
-        {"trigger": "go_back", "source": ["state1", "state2", "homepage", "recommend", "showMember"], "dest": "user"},
+        {
+            "trigger": "advance",
+            "source": ["homepage", "showMember"],
+            "dest": "introduce",
+            "conditions": "is_going_to_introduce",
+        },
+        {
+            "trigger": "advance",
+            "source": ["homepage"],
+            "dest": "living",
+            "conditions": "is_going_to_living",
+        },
+        {
+            "trigger": "advance",
+            "source": ["recommend","showMember", "introduce"],
+            "dest": "homepage",
+            "conditions": "is_going_to_backToHompage",
+        },
+        {"trigger": "go_back", "source": ["homepage", "recommend", "showMember", "introduce", "living"], "dest": "homepage"},
     ],
     initial="user",
     auto_transitions=False,
@@ -122,7 +128,7 @@ def webhook_handler():
         print(f"REQUEST BODY: \n{body}")
         response = machine.advance(event)
         if response == False:
-            send_text_message(event.reply_token, "請輸入上述指令")
+            send_text_message(event.source.user_id, "請輸入上述指令")
 
     return "OK"
 

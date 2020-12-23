@@ -86,9 +86,9 @@ context = [
     'hololiveEN一期生\n\n一出場就吃毒，被稱作2代はあちゃま，喜歡FPS遊戲，嘴王，與鯊魚關係很好。'
 ]
 
-def send_text_message(reply_token, text):
+def send_text_message(user_id, text):
     line_bot_api = LineBotApi(channel_access_token)
-    line_bot_api.reply_message(reply_token, TextSendMessage(text=text))
+    line_bot_api.push_message(user_id, TextSendMessage(text=text))
     
     return "OK"
 
@@ -270,12 +270,131 @@ def send_show_message(user_id, memberName):
                         "spacing": "none"
                     }
                 }
-        print(message)
         line_bot_api.push_message(user_id, FlexSendMessage(alt_text='flex', contents=message))
         return "OK"
     else:
         line_bot_api.push_message(user_id, TextSendMessage(text='請輸入正確名稱'))
         raise ValueError('name is not matched')
+        
+def send_living_message(user_id):
+    line_bot_api = LineBotApi(channel_access_token)
+    count = 0
+    #for i in range(len(id)):
+        #try:
+    html = urllib.request.urlopen('https://www.googleapis.com/youtube/v3/search?part=snippet&channelId='+id[14]+'&type=video&eventType=live&key='+google_key).read()
+    video_id = json.loads(html)['items'][0]['id']['videoId']
+    video_title = json.loads(html)['items'][0]['snippet']['title']
+    video_image = json.loads(html)['items'][0]['snippet']['thumbnails']['high']['url']
+    print(video_title)
+    message = {
+                "type": "bubble",
+                "header": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                    {
+                        "type": "box",
+                        "layout": "horizontal",
+                        "contents": [
+                        {
+                            "type": "image",
+                            "url": video_image,
+                            "size": "full",
+                            "aspectMode": "cover",
+                            "aspectRatio": "480:270",
+                            "gravity": "center",
+                            "flex": 1
+                        },
+                        {
+                            "type": "box",
+                            "layout": "horizontal",
+                            "contents": [
+                            {
+                                "type": "text",
+                                "text": "Live",
+                                "size": "xs",
+                                "color": "#ffffff",
+                                "align": "center",
+                                "gravity": "center"
+                            }
+                            ],
+                            "backgroundColor": "#EC3D44",
+                            "paddingAll": "2px",
+                            "paddingStart": "4px",
+                            "paddingEnd": "4px",
+                            "flex": 0,
+                            "position": "absolute",
+                            "offsetStart": "18px",
+                            "offsetTop": "18px",
+                            "cornerRadius": "100px",
+                            "width": "48px",
+                            "height": "25px"
+                        }
+                        ]
+                    }
+                    ],
+                    "paddingAll": "0px"
+                },
+                "body": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                        {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                            {
+                                "type": "text",
+                                "contents": [],
+                                "size": "md",
+                                "wrap": True,
+                                "text": video_title,
+                                "color": "#ffffff",
+                                "weight": "bold"
+                            }
+                            ],
+                            "spacing": "sm"
+                        },
+                        {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                            {
+                                "type": "button",
+                                "action": {
+                                "type": "uri",
+                                "label": "點我看直播",
+                                "uri": "https://www.youtube.com/watch?v="+video_id
+                                },
+                                "height": "sm",
+                                "style": "link",
+                                "color": "#ffffff"
+                            }
+                            ],
+                            "paddingAll": "13px",
+                            "cornerRadius": "2px",
+                            "margin": "xl",
+                            "backgroundColor": "#ffffff1A",
+                            "paddingTop": "xs",
+                            "paddingBottom": "xs"
+                        }
+                        ]
+                    }
+                    ],
+                    "paddingAll": "20px",
+                    "backgroundColor": "#464F69"
+                }
+            }
+    line_bot_api.push_message(user_id, FlexSendMessage(alt_text='flex', contents=message))
+    count = count + 1
+        #except:
+            #continue
+    if count == 0:
+        line_bot_api.push_message(user_id, TextSendMessage(text="目前沒有直播"))
         
 """
 def send_image_url(id, img_url):
