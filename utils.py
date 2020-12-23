@@ -8,7 +8,11 @@ import json
 channel_access_token = os.getenv("LINE_CHANNEL_ACCESS_TOKEN", None)
 name = ['Sora', 'Roboco', 'Miko', 'Suisei', 'Mel', 'Aki', 'Haato', 'Matsuri', 'Fubuki', 'Aqua', 'Shion', 'Ayame', 'Choco', 'Subaru', 'Pekora', 'Rusia', 'Flare', 'Noel', 'Marine', 'Kanata', 'Coco', 'Watame', 'Towa', 'Luna', 'Lamy', 'Nene', 'Botan', 'Polka', 'Mio', 'Okayu', 'Korone','Calliope', 'Kiara', 'Ina', 'Gura', 'Amelia']
 id = ['UCp6993wxpyDPHUpavwDFqgg', 'UCDqI2jOz0weumE8s7paEk6g', 'UC-hM6YJuNYVAmUWxeIr9FeA', 'UC5CwaMl1eIgY8h02uZw7u8A', 'UCD8HOxPs4Xvsm8H0ZxXGiBw', 'UCFTLzh12_nrtzqBPsTCqenA', 'UC1CfXB_kRs3C-zaeTG3oGyg', 'UCQ0UDLQCjY0rmuxCDE38FGg', 'UCdn5BQ06XqgXoAxIhbqw5Rg', 'UC1opHUrw8rvnsadT-iGp7Cg', 'UCXTpFs_3PqI41qX2d9tL2Rw', 'UC7fk0CB07ly8oSl0aqKkqFg', 'UC1suqwovbL1kzsoaZgFZLKg', 'UCvzGlP9oQwU--Y0r9id_jnA', 'UC1DCedRgGHBdm81E1llLhOQ', 'UCl_gCybOJRIgOXw6Qb4qJzQ', 'UCvInZx9h3jC2JzsIzoOebWg', 'UCdyqAaZDKHXg4Ahi7VENThQ', 'UCCzUftO8KOVkV4wQG1vkUvg', 'UCZlDXzGoo7d44bwdNObFacg', 'UCS9uQI-jC3DE0L4IpXyvr6w', 'UCqm3BQLlJfvkTsX_hvm0UmA', 'UC1uv2Oq6kNxgATlCiez59hw', 'UCa9Y57gfeY0Zro_noHRVrnw', 'UCFKOVgVbGmX65RxO3EtH3iw', 'UCAWSyEs_Io8MtpY3m-zqILA', 'UCUKD-uaobj9jiqB-VXt71mA', 'UCK9V2B22uJYu3N7eR_BT9QA', 'UCp-5t9SrOQwXMU7iIjQfARg', 'UCvaTdHTWBGv3MKj3KVqJVCw', 'UChAnqc_AY5_I3Px5dig3X1Q', 'UCL_qhgtOy0dy1Agp8vkySQg', 'UCHsx4Hqa-1ORjQTh9TYDhww', 'UCMwGHR0BTZuLsmjY_NT5Pwg', 'UCoSrY_IQQVpmIRZ9Xf-y93g', 'UCyl1z3jo3XHR1riLFKG5UAg']
+<<<<<<< HEAD
 google_key = os.getenv('GOOGLE_KEY', None)
+=======
+google_key = 'AIzaSyCqXKwug6BCCNtyyX4MQAT75e3KPe6X6kc'
+>>>>>>> d26f0600f470f810afcd30090ec1a345c0ce7eb3
 twitter = [
     'https://twitter.com/tokino_sora',
     'https://twitter.com/robocosan',
