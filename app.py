@@ -10,6 +10,7 @@ from linebot.models import MessageEvent, TextMessage, TextSendMessage
 from fsm import TocMachine
 from utils import send_text_message
 
+
 load_dotenv()
 
 
@@ -52,12 +53,19 @@ machine = TocMachine(
             "dest": "homepage",
             "conditions": "is_going_to_backToHompage",
         },
+        {
+            "trigger": "advance",
+            "source": ["living"],
+            "dest": "homepage",
+            "conditions": "is_going_to_livingBackHompage",
+        },
         {"trigger": "go_back", "source": ["homepage", "recommend", "showMember", "introduce", "living"], "dest": "homepage"},
     ],
     initial="user",
     auto_transitions=False,
     show_conditions=True,
 )
+
 
 app = Flask(__name__, static_url_path="")
 

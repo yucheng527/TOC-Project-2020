@@ -29,6 +29,9 @@ class TocMachine(GraphMachine):
         text = event.message.text
         return text == "實況中"
 
+    def is_going_to_livingBackHompage(self, event):
+        return True
+
     def on_enter_homepage(self, event):
         print("I'm entering hompage")
         userid = event.source.user_id
@@ -109,5 +112,7 @@ class TocMachine(GraphMachine):
 
     def on_enter_living(self, event):
         userid = event.source.user_id
+        send_text_message(userid, "請稍待資訊跑完再輸入...")
+        send_text_message(userid, "查詢資料中......")
         send_living_message(userid)
-        self.go_back(event)
+        send_text_message(userid, "請輸入任何字反回主選單")

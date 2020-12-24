@@ -4,11 +4,13 @@ from linebot import LineBotApi, WebhookParser
 from linebot.models import MessageEvent, TextMessage, TextSendMessage, ButtonsTemplate, TemplateSendMessage, ImageCarouselColumn, MessageTemplateAction, ImageCarouselTemplate, FlexSendMessage
 import urllib.request
 import json
+from selenium import webdriver
+import time
+from bs4 import BeautifulSoup 
 
 channel_access_token = os.getenv("LINE_CHANNEL_ACCESS_TOKEN", None)
 name = ['Sora', 'Roboco', 'Miko', 'Suisei', 'Mel', 'Aki', 'Haato', 'Matsuri', 'Fubuki', 'Aqua', 'Shion', 'Ayame', 'Choco', 'Subaru', 'Pekora', 'Rusia', 'Flare', 'Noel', 'Marine', 'Kanata', 'Coco', 'Watame', 'Towa', 'Luna', 'Lamy', 'Nene', 'Botan', 'Polka', 'Mio', 'Okayu', 'Korone','Calliope', 'Kiara', 'Ina', 'Gura', 'Amelia']
 id = ['UCp6993wxpyDPHUpavwDFqgg', 'UCDqI2jOz0weumE8s7paEk6g', 'UC-hM6YJuNYVAmUWxeIr9FeA', 'UC5CwaMl1eIgY8h02uZw7u8A', 'UCD8HOxPs4Xvsm8H0ZxXGiBw', 'UCFTLzh12_nrtzqBPsTCqenA', 'UC1CfXB_kRs3C-zaeTG3oGyg', 'UCQ0UDLQCjY0rmuxCDE38FGg', 'UCdn5BQ06XqgXoAxIhbqw5Rg', 'UC1opHUrw8rvnsadT-iGp7Cg', 'UCXTpFs_3PqI41qX2d9tL2Rw', 'UC7fk0CB07ly8oSl0aqKkqFg', 'UC1suqwovbL1kzsoaZgFZLKg', 'UCvzGlP9oQwU--Y0r9id_jnA', 'UC1DCedRgGHBdm81E1llLhOQ', 'UCl_gCybOJRIgOXw6Qb4qJzQ', 'UCvInZx9h3jC2JzsIzoOebWg', 'UCdyqAaZDKHXg4Ahi7VENThQ', 'UCCzUftO8KOVkV4wQG1vkUvg', 'UCZlDXzGoo7d44bwdNObFacg', 'UCS9uQI-jC3DE0L4IpXyvr6w', 'UCqm3BQLlJfvkTsX_hvm0UmA', 'UC1uv2Oq6kNxgATlCiez59hw', 'UCa9Y57gfeY0Zro_noHRVrnw', 'UCFKOVgVbGmX65RxO3EtH3iw', 'UCAWSyEs_Io8MtpY3m-zqILA', 'UCUKD-uaobj9jiqB-VXt71mA', 'UCK9V2B22uJYu3N7eR_BT9QA', 'UCp-5t9SrOQwXMU7iIjQfARg', 'UCvaTdHTWBGv3MKj3KVqJVCw', 'UChAnqc_AY5_I3Px5dig3X1Q', 'UCL_qhgtOy0dy1Agp8vkySQg', 'UCHsx4Hqa-1ORjQTh9TYDhww', 'UCMwGHR0BTZuLsmjY_NT5Pwg', 'UCoSrY_IQQVpmIRZ9Xf-y93g', 'UCyl1z3jo3XHR1riLFKG5UAg']
-google_key = os.getenv('GOOGLE_KEY', None)
 twitter = [
     'https://twitter.com/tokino_sora',
     'https://twitter.com/robocosan',
@@ -149,14 +151,19 @@ def send_show_message(user_id, memberName):
     line_bot_api = LineBotApi(channel_access_token)
     if memberName in name:
         index = name.index(memberName)
-        line_bot_api.push_message(user_id, TextSendMessage(text=context[index]))
-        html = urllib.request.urlopen('https://www.googleapis.com/youtube/v3/channels?part=brandingSettings&id='+id[index]+'&key='+google_key).read()
-        channel_name = json.loads(html)['items'][0]['brandingSettings']['channel']['title']
-        channel_banner = json.loads(html)['items'][0]['brandingSettings']['image']['bannerExternalUrl']
-        html = urllib.request.urlopen('https://www.googleapis.com/youtube/v3/channels?part=snippet&id='+id[index]+'&fields=items%2Fsnippet%2Fthumbnails&key='+google_key).read()
-        channel_avatar = json.loads(html)['items'][0]['snippet']['thumbnails']['medium']['url']
-        html = urllib.request.urlopen('https://www.googleapis.com/youtube/v3/channels?part=statistics&id='+id[index]+'&key='+google_key).read()
-        subscriber = json.loads(html)['items'][0]['statistics']["subscriberCount"]
+        chrome = webdriver.Chrome("./chromedriver")
+        chrome.get("https://www.youtube.com/channel/"+id[index])
+        #time.sleep(1)
+        soup = BeautifulSoup(chrome.page_source, "html.parser")
+        chrome.close()
+        channel_name = soup.find("yt-formatted-string", {"id": "text", "class": "style-scope ytd-channel-name"}).text
+        channel_avatar = soup.find("img", {"id": "img", "class": "style-scope yt-img-shadow"})["src"]
+        subscriber = soup.find("yt-formatted-string", {"id": "subscriber-count", "class": "style-scope ytd-c4-tabbed-header-renderer"}).text
+        subscriber = subscriber.replace("subscribers", "訂閱")
+        channel_banner = soup.find("ytd-c4-tabbed-header-renderer", {"class": "style-scope ytd-browse"})["style"]
+        channel_banner = channel_banner[24::]
+        channel_banner = channel_banner.replace('\\', '')
+        channel_banner = channel_banner[0:channel_banner.find('='):]
         message = {
                     "type": "bubble",
                     "body": {
@@ -222,7 +229,7 @@ def send_show_message(user_id, memberName):
                                     "contents": [
                                     {
                                         "type": "text",
-                                        "text": subscriber+"訂閱",
+                                        "text": subscriber,
                                         "size": "sm",
                                         "color": "#bcbcbc"
                                     }
@@ -270,6 +277,7 @@ def send_show_message(user_id, memberName):
                         "spacing": "none"
                     }
                 }
+        line_bot_api.push_message(user_id, TextSendMessage(text=context[index]))
         line_bot_api.push_message(user_id, FlexSendMessage(alt_text='flex', contents=message))
         return "OK"
     else:
@@ -278,123 +286,132 @@ def send_show_message(user_id, memberName):
         
 def send_living_message(user_id):
     line_bot_api = LineBotApi(channel_access_token)
-    count = 0
-    #for i in range(len(id)):
-        #try:
-    html = urllib.request.urlopen('https://www.googleapis.com/youtube/v3/search?part=snippet&channelId='+id[14]+'&type=video&eventType=live&key='+google_key).read()
-    video_id = json.loads(html)['items'][0]['id']['videoId']
-    video_title = json.loads(html)['items'][0]['snippet']['title']
-    video_image = json.loads(html)['items'][0]['snippet']['thumbnails']['high']['url']
-    print(video_title)
-    message = {
-                "type": "bubble",
-                "header": {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [
-                    {
-                        "type": "box",
-                        "layout": "horizontal",
-                        "contents": [
-                        {
-                            "type": "image",
-                            "url": video_image,
-                            "size": "full",
-                            "aspectMode": "cover",
-                            "aspectRatio": "480:270",
-                            "gravity": "center",
-                            "flex": 1
-                        },
-                        {
-                            "type": "box",
-                            "layout": "horizontal",
-                            "contents": [
-                            {
-                                "type": "text",
-                                "text": "Live",
-                                "size": "xs",
-                                "color": "#ffffff",
-                                "align": "center",
-                                "gravity": "center"
-                            }
-                            ],
-                            "backgroundColor": "#EC3D44",
-                            "paddingAll": "2px",
-                            "paddingStart": "4px",
-                            "paddingEnd": "4px",
-                            "flex": 0,
-                            "position": "absolute",
-                            "offsetStart": "18px",
-                            "offsetTop": "18px",
-                            "cornerRadius": "100px",
-                            "width": "48px",
-                            "height": "25px"
-                        }
-                        ]
-                    }
-                    ],
-                    "paddingAll": "0px"
-                },
-                "body": {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [
-                    {
-                        "type": "box",
-                        "layout": "vertical",
-                        "contents": [
-                        {
+    chrome = webdriver.Chrome("./chromedriver")
+    lst = []
+    for i in range(len(id)):
+        try:
+            print(i)
+            chrome.get("https://www.youtube.com/channel/"+id[i])
+            time.sleep(3)
+            soup = BeautifulSoup(chrome.page_source, "html.parser")
+            living_now = soup.find("ytd-thumbnail-overlay-time-status-renderer", {"class": "style-scope ytd-thumbnail", "overlay-style": "LIVE"}).text
+            channel_tag = soup.find("a", {"id": "video-title", "class": "yt-simple-endpoint style-scope ytd-video-renderer"})
+            video_id = channel_tag["href"]
+            video_title = channel_tag["title"]
+            video_image = soup.find("img", {"id": "img", "class": "style-scope yt-img-shadow", "width": "246"})["src"]
+            video_image = video_image[0:video_image.find("?")]
+            message = {
+                        "type": "bubble",
+                        "header": {
                             "type": "box",
                             "layout": "vertical",
                             "contents": [
                             {
-                                "type": "text",
-                                "contents": [],
-                                "size": "md",
-                                "wrap": True,
-                                "text": video_title,
-                                "color": "#ffffff",
-                                "weight": "bold"
-                            }
-                            ],
-                            "spacing": "sm"
-                        },
-                        {
-                            "type": "box",
-                            "layout": "vertical",
-                            "contents": [
-                            {
-                                "type": "button",
-                                "action": {
-                                "type": "uri",
-                                "label": "點我看直播",
-                                "uri": "https://www.youtube.com/watch?v="+video_id
+                                "type": "box",
+                                "layout": "horizontal",
+                                "contents": [
+                                {
+                                    "type": "image",
+                                    "url": video_image,
+                                    "size": "full",
+                                    "aspectMode": "cover",
+                                    "aspectRatio": "480:270",
+                                    "gravity": "center",
+                                    "flex": 1
                                 },
-                                "height": "sm",
-                                "style": "link",
-                                "color": "#ffffff"
+                                {
+                                    "type": "box",
+                                    "layout": "horizontal",
+                                    "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": "Live",
+                                        "size": "xs",
+                                        "color": "#ffffff",
+                                        "align": "center",
+                                        "gravity": "center"
+                                    }
+                                    ],
+                                    "backgroundColor": "#EC3D44",
+                                    "paddingAll": "2px",
+                                    "paddingStart": "4px",
+                                    "paddingEnd": "4px",
+                                    "flex": 0,
+                                    "position": "absolute",
+                                    "offsetStart": "18px",
+                                    "offsetTop": "18px",
+                                    "cornerRadius": "100px",
+                                    "width": "48px",
+                                    "height": "25px"
+                                }
+                                ]
                             }
                             ],
-                            "paddingAll": "13px",
-                            "cornerRadius": "2px",
-                            "margin": "xl",
-                            "backgroundColor": "#ffffff1A",
-                            "paddingTop": "xs",
-                            "paddingBottom": "xs"
+                            "paddingAll": "0px"
+                        },
+                        "body": {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                            {
+                                "type": "box",
+                                "layout": "vertical",
+                                "contents": [
+                                {
+                                    "type": "box",
+                                    "layout": "vertical",
+                                    "contents": [
+                                    {
+                                        "type": "text",
+                                        "contents": [],
+                                        "size": "md",
+                                        "wrap": True,
+                                        "text": video_title,
+                                        "color": "#ffffff",
+                                        "weight": "bold"
+                                    }
+                                    ],
+                                    "spacing": "sm"
+                                },
+                                {
+                                    "type": "box",
+                                    "layout": "vertical",
+                                    "contents": [
+                                    {
+                                        "type": "button",
+                                        "action": {
+                                        "type": "uri",
+                                        "label": "點我看直播",
+                                        "uri": "https://www.youtube.com"+video_id
+                                        },
+                                        "height": "sm",
+                                        "style": "link",
+                                        "color": "#ffffff"
+                                    }
+                                    ],
+                                    "paddingAll": "13px",
+                                    "cornerRadius": "2px",
+                                    "margin": "xl",
+                                    "backgroundColor": "#ffffff1A",
+                                    "paddingTop": "xs",
+                                    "paddingBottom": "xs"
+                                }
+                                ]
+                            }
+                            ],
+                            "paddingAll": "20px",
+                            "backgroundColor": "#464F69"
                         }
-                        ]
                     }
-                    ],
-                    "paddingAll": "20px",
-                    "backgroundColor": "#464F69"
-                }
-            }
-    line_bot_api.push_message(user_id, FlexSendMessage(alt_text='flex', contents=message))
-    count = count + 1
-        #except:
-            #continue
-    if count == 0:
-        line_bot_api.push_message(user_id, TextSendMessage(text="目前沒有直播"))
+            lst.append(message)
+        except:
+            continue
+    chrome.close()
+    if len(lst) == 0:
+        line_bot_api.push_message(user_id, TextSendMessage(text="目前沒有直播QQ"))
+    else:
+        for i in range(len(lst)):
+            line_bot_api.push_message(user_id, FlexSendMessage(alt_text='flex', contents=lst[i]))   
         
 """
 def send_image_url(id, img_url):
