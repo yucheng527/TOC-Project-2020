@@ -15,7 +15,7 @@ load_dotenv()
 
 
 machine = TocMachine(
-    states=["user", "homepage", "recommend", "showMember", "introduce", "living"],
+    states=["user", "homepage", "recommend", "showMember", "introduce", "living", "card", "showCard"],
     transitions=[
         {
             "trigger": "advance",
@@ -49,7 +49,7 @@ machine = TocMachine(
         },
         {
             "trigger": "advance",
-            "source": ["recommend","showMember", "introduce"],
+            "source": ["recommend","showMember", "introduce", "card", "showCard"],
             "dest": "homepage",
             "conditions": "is_going_to_backToHompage",
         },
@@ -59,7 +59,19 @@ machine = TocMachine(
             "dest": "homepage",
             "conditions": "is_going_to_livingBackHompage",
         },
-        {"trigger": "go_back", "source": ["homepage", "recommend", "showMember", "introduce", "living"], "dest": "homepage"},
+        {
+            "trigger": "advance",
+            "source": ["homepage"],
+            "dest": "card",
+            "conditions": "is_going_to_card",
+        },
+        {
+            "trigger": "advance",
+            "source": ["card", "showCard"],
+            "dest": "showCard",
+            "conditions": "is_going_to_showCard",
+        },
+        {"trigger": "go_back", "source": ["homepage", "recommend", "showMember", "introduce", "living", "card", "showCard"], "dest": "homepage"},
     ],
     initial="user",
     auto_transitions=False,
@@ -68,7 +80,6 @@ machine = TocMachine(
 
 
 app = Flask(__name__, static_url_path="")
-
 
 # get channel_secret and channel_access_token from your environment variable
 channel_secret = os.getenv("LINE_CHANNEL_SECRET", None)
@@ -79,7 +90,6 @@ if channel_secret is None:
 if channel_access_token is None:
     print("Specify LINE_CHANNEL_ACCESS_TOKEN as environment variable.")
     sys.exit(1)
-
 line_bot_api = LineBotApi(channel_access_token)
 parser = WebhookParser(channel_secret)
 

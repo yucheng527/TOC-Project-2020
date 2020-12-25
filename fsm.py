@@ -1,6 +1,6 @@
 from transitions.extensions import GraphMachine
 
-from utils import send_text_message, send_button_message, send_recommend_image_carousel, send_show_message, send_living_message
+from utils import send_text_message, send_button_message, send_recommend_image_carousel, send_show_message, send_living_message, send_image
 from linebot.models import MessageTemplateAction
 
 class TocMachine(GraphMachine):
@@ -32,6 +32,14 @@ class TocMachine(GraphMachine):
     def is_going_to_livingBackHompage(self, event):
         return True
 
+    def is_going_to_card(self, event):
+        text = event.message.text
+        return text == "抽卡"
+
+    def is_going_to_showCard(self, event):
+        text = event.message.text
+        return text == "抽"
+
     def on_enter_homepage(self, event):
         print("I'm entering hompage")
         userid = event.source.user_id
@@ -49,6 +57,10 @@ class TocMachine(GraphMachine):
             MessageTemplateAction(
                 label='實況中',
                 text='實況中'
+            ),
+            MessageTemplateAction(
+                label='抽卡',
+                text='抽卡'
             )
         ]
         url = 'https://i.imgur.com/y99Dsat.jpg'
@@ -113,6 +125,16 @@ class TocMachine(GraphMachine):
     def on_enter_living(self, event):
         userid = event.source.user_id
         send_text_message(userid, "請稍待資訊跑完再輸入...")
+        send_text_message(userid, "大約花費幾分鐘時間...")
         send_text_message(userid, "查詢資料中......")
         send_living_message(userid)
         send_text_message(userid, "請輸入任何字反回主選單")
+
+    def on_enter_card(self, event):
+        userid = event.source.user_id
+        send_text_message(userid, "若想抽卡,請打\"抽\"")
+        send_text_message(userid, "若想離開抽卡,請打\"不了\"")
+        
+    def on_enter_showCard(self, event):
+        userid = event.source.user_id
+        send_image(userid)

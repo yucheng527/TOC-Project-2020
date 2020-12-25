@@ -1,12 +1,15 @@
 import os
 
 from linebot import LineBotApi, WebhookParser
-from linebot.models import MessageEvent, TextMessage, TextSendMessage, ButtonsTemplate, TemplateSendMessage, ImageCarouselColumn, MessageTemplateAction, ImageCarouselTemplate, FlexSendMessage
-import urllib.request
-import json
-from selenium import webdriver
+from linebot.models import MessageEvent, TextMessage, TextSendMessage, ButtonsTemplate, TemplateSendMessage, ImageCarouselColumn, MessageTemplateAction, ImageCarouselTemplate, FlexSendMessage, ImageSendMessage
+import requests
 import time
-from bs4 import BeautifulSoup 
+from bs4 import BeautifulSoup
+from selenium import webdriver 
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+import random
 
 channel_access_token = os.getenv("LINE_CHANNEL_ACCESS_TOKEN", None)
 name = ['Sora', 'Roboco', 'Miko', 'Suisei', 'Mel', 'Aki', 'Haato', 'Matsuri', 'Fubuki', 'Aqua', 'Shion', 'Ayame', 'Choco', 'Subaru', 'Pekora', 'Rusia', 'Flare', 'Noel', 'Marine', 'Kanata', 'Coco', 'Watame', 'Towa', 'Luna', 'Lamy', 'Nene', 'Botan', 'Polka', 'Mio', 'Okayu', 'Korone','Calliope', 'Kiara', 'Ina', 'Gura', 'Amelia']
@@ -290,9 +293,11 @@ def send_living_message(user_id):
     lst = []
     for i in range(len(id)):
         try:
-            print(i)
+            print(len(lst))
             chrome.get("https://www.youtube.com/channel/"+id[i])
-            time.sleep(3)
+            WebDriverWait(chrome, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "ytd-thumbnail-overlay-time-status-renderer[class='style-scope ytd-thumbnail']")))
+            #chrome.implicitly_wait(10)
+            #time.sleep(2)
             soup = BeautifulSoup(chrome.page_source, "html.parser")
             living_now = soup.find("ytd-thumbnail-overlay-time-status-renderer", {"class": "style-scope ytd-thumbnail", "overlay-style": "LIVE"}).text
             channel_tag = soup.find("a", {"id": "video-title", "class": "yt-simple-endpoint style-scope ytd-video-renderer"})
@@ -412,7 +417,16 @@ def send_living_message(user_id):
     else:
         for i in range(len(lst)):
             line_bot_api.push_message(user_id, FlexSendMessage(alt_text='flex', contents=lst[i]))   
-        
+
+def send_image(user_id):
+    line_bot_api = LineBotApi(channel_access_token)
+    url = "https://yande.re/post?page="+str(random.randint(1,20))+"&tags=hololive"
+    res = requests.get(url)
+    soup = BeautifulSoup(res.text, "html.parser")
+    image = soup.find_all("a", {"class": "directlink largeimg"})
+    image_url = image[random.randint(0, len(image)-1)]["href"]
+    line_bot_api.push_message(user_id, ImageSendMessage(original_content_url=image_url, preview_image_url=image_url))
+    #print(image[random.randint(0, len(image)-1)]["href"])   
 """
 def send_image_url(id, img_url):
     pass
