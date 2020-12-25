@@ -441,7 +441,7 @@ def send_image(reply_token):
 
 def send_fsm(reply_token):
     line_bot_api = LineBotApi(channel_access_token)
-    line_bot_api.reply_message(reply_token, ImageSendMessage(original_content_url="https://imgur.com/ktPrsTv", preview_image_url="https://imgur.com/ktPrsTv"))
+    line_bot_api.reply_message(reply_token, ImageSendMessage(original_content_url="https://i.imgur.com/ktPrsTv.png", preview_image_url="https://i.imgur.com/ktPrsTv.png"))
 
 def send_reply_message(reply_token, text):
     line_bot_api = LineBotApi(channel_access_token)
