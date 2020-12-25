@@ -8,7 +8,7 @@ from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 
 from fsm import TocMachine
-from utils import send_text_message
+from utils import send_text_message, send_fsm
 
 
 load_dotenv()
@@ -146,7 +146,12 @@ def webhook_handler():
         print(f"REQUEST BODY: \n{body}")
         response = machine.advance(event)
         if response == False:
-            send_text_message(event.source.user_id, "請輸入上述指令")
+            if event.message.text.lower() == "fsm":
+                send_fsm(event.reply_token)
+            else :
+                line_bot_api.reply_message(
+                    event.reply_token, TextSendMessage(text="請輸入上述指令")
+                )
 
     return "OK"
 

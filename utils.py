@@ -101,7 +101,7 @@ def send_text_message(user_id, text):
 
 
 
-def send_button_message(user_id, image_url, title, text, action):
+def send_button_message(reply_token, image_url, title, text, action):
     line_bot_api = LineBotApi(channel_access_token)
     message = TemplateSendMessage(
         alt_text='Buttons template',
@@ -113,11 +113,11 @@ def send_button_message(user_id, image_url, title, text, action):
         )
     )
     #print("check1")
-    line_bot_api.push_message(user_id, message)
+    line_bot_api.reply_message(reply_token, message)
     #print("check2")
     return "OK"
 
-def send_recommend_image_carousel(user_id):
+def send_recommend_image_carousel(reply_token):
     line_bot_api = LineBotApi(channel_access_token)
     gur = 'https://user-images.strikinglycdn.com/res/hrscywv4p/image/upload/c_limit,fl_lossy,h_1000,w_500,f_auto,q_auto/1369026/251247_457554.jpg'
     kor = 'https://user-images.strikinglycdn.com/res/hrscywv4p/image/upload/c_limit,fl_lossy,h_1000,w_500,f_auto,q_auto/1369026/305905_549251.png'
@@ -147,7 +147,7 @@ def send_recommend_image_carousel(user_id):
         alt_text='ImageCarousel template',
         template=ImageCarouselTemplate(columns=cols)
     )
-    line_bot_api.push_message(user_id, message)
+    line_bot_api.reply_message(reply_token, message)
     return "OK"
 
 def send_show_message(user_id, memberName):
@@ -418,15 +418,23 @@ def send_living_message(user_id):
         for i in range(len(lst)):
             line_bot_api.push_message(user_id, FlexSendMessage(alt_text='flex', contents=lst[i]))   
 
-def send_image(user_id):
+def send_image(reply_token):
     line_bot_api = LineBotApi(channel_access_token)
     url = "https://yande.re/post?page="+str(random.randint(1,20))+"&tags=hololive"
     res = requests.get(url)
     soup = BeautifulSoup(res.text, "html.parser")
     image = soup.find_all("a", {"class": "directlink largeimg"})
     image_url = image[random.randint(0, len(image)-1)]["href"]
-    line_bot_api.push_message(user_id, ImageSendMessage(original_content_url=image_url, preview_image_url=image_url))
+    line_bot_api.reply_message(reply_token, ImageSendMessage(original_content_url=image_url, preview_image_url=image_url))
     #print(image[random.randint(0, len(image)-1)]["href"])   
+
+def send_fsm(reply_token):
+    line_bot_api = LineBotApi(channel_access_token)
+    line_bot_api.reply_message(reply_token, ImageSendMessage(original_content_url="https://testing123bot.herokuapp.com/show-fsm", preview_image_url="https://testing123bot.herokuapp.com/show-fsm"))
+
+def send_reply_message(reply_token, text):
+    line_bot_api = LineBotApi(channel_access_token)
+    line_bot_api.reply_message(reply_token, TextSendMessage(text=text))
 """
 def send_image_url(id, img_url):
     pass
