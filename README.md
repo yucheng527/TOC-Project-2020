@@ -1,18 +1,22 @@
 # Hololive Tool
 
-##介紹
+## 介紹
 這是一個關於Hololive的小工具
+<div align=center>
+	<img src="img/icon.png" style="zoom:70%">
+</div>
 
-###名稱：Holo小工具
+### 名稱：Holo小工具
 <div align=center>
 	<img src="img/0.png" style="zoom:70%">
 </div>
 
-###功能：
+### 功能：
 下圖是主選單
 <div align=center>
-	<img src="img/1.png" style="zoom:70%">
+	<img src="img/1.jpg" style="zoom:70%">
 </div>
+
 1. 可以以人氣成員進行查詢
 2. 可以以所有成員進行查詢
 3. 可以查詢實況中成員
@@ -20,40 +24,45 @@
 
 + 首先按下人氣成員按鈕，會秀出10張人氣成員的圖片，按下圖片以看取成員介紹
 <div align=center>
-	<img src="img/2.png" style="zoom:70%">
-	<img src="img/3.png" style="zoom:70%">
-	<img src="img/4.png" style="zoom:70%">
+	<img src="img/2.jpg" style="zoom:70%">
+	<img src="img/3.jpg" style="zoom:70%">
+	<img src="img/4.jpg" style="zoom:70%">
 </div>
 + 秀完介紹後跳出再次詢問框
 <div align=center>
-	<img src="img/5.png" style="zoom:70%">
+	<img src="img/5.jpg" style="zoom:70%">
 </div>
+
 + 按下成員查詢，送出個成員基本名字訊息，輸入括號內英文名以看成員資訊
 <div align=center>
-	<img src="img/6.png" style="zoom:70%">
-	<img src="img/7.png" style="zoom:70%">
-	<img src="img/8.png" style="zoom:70%">
-	<img src="img/9.png" style="zoom:70%">
+	<img src="img/6.jpg" style="zoom:70%">
+	<img src="img/7.jpg" style="zoom:70%">
+	<img src="img/8.jpg" style="zoom:70%">
+	<img src="img/9.jpg" style="zoom:70%">
 </div>
+
 + 按下實況中，送出實況中影片訊息
 <div align=center>
-	<img src="img/10.png" style="zoom:70%">
-	<img src="img/11.png" style="zoom:70%">
-	<img src="img/12.png" style="zoom:70%">
-	<img src="img/13.png" style="zoom:70%">
-	<img src="img/14.png" style="zoom:70%">
+	<img src="img/10.jpg" style="zoom:70%">
+	<img src="img/11.jpg" style="zoom:70%">
+	<img src="img/12.jpg" style="zoom:70%">
+	<img src="img/13.jpg" style="zoom:70%">
+	<img src="img/14.jpg" style="zoom:70%">
 </div>
+
 + 按下抽卡進入抽卡模式
 <div align=center>
-	<img src="img/15.png" style="zoom:70%">
-	<img src="img/16.png" style="zoom:70%">
-	<img src="img/17.png" style="zoom:70%">
-	<img src="img/18.png" style="zoom:70%">
+	<img src="img/15.jpg" style="zoom:70%">
+	<img src="img/16.jpg" style="zoom:70%">
+	<img src="img/17.jpg" style="zoom:70%">
+	<img src="img/18.jpg" style="zoom:70%">
 </div>
-###FSM
+
+### FSM
 <div align=center>
-	<img src="fsm.png" style="zoom:70%">
+	<img src="fsm.png">
 </div>
+
 ## Setup
 
 ### Prerequisite
