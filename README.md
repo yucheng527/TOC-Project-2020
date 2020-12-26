@@ -14,7 +14,7 @@
 ### 功能：
 下圖是主選單
 <div align=center>
-	<img src="img/1.jpg" width="240" height="480">
+	<img src="img/1.jpg" width="300" height="480">
 </div>
 
 1. 可以以人氣成員進行查詢
@@ -24,38 +24,39 @@
 
 + 首先按下人氣成員按鈕，會秀出10張人氣成員的圖片，按下圖片以看取成員介紹
 <div align=center>
-	<img src="img/2.jpg" width="240" height="480">
-	<img src="img/3.jpg" width="240" height="480">
-	<img src="img/4.jpg" width="240" height="480">
+	<img src="img/2.jpg" width="300" height="480">
+	<img src="img/3.jpg" width="300" height="480">
+	<img src="img/4.jpg" width="300" height="480">
 </div>
+
 + 秀完介紹後跳出再次詢問框
 <div align=center>
-	<img src="img/5.jpg" width="240" height="480">
+	<img src="img/5.jpg" width="300" height="480">
 </div>
 
 + 按下成員查詢，送出個成員基本名字訊息，輸入括號內英文名以看成員資訊
 <div align=center>
-	<img src="img/6.jpg" width="240" height="480">
-	<img src="img/7.jpg" width="240" height="480">
-	<img src="img/8.jpg" width="240" height="480">
-	<img src="img/9.jpg" width="240" height="480">
+	<img src="img/6.jpg" width="300" height="480">
+	<img src="img/7.jpg" width="300" height="480">
+	<img src="img/8.jpg" width="300" height="480">
+	<img src="img/9.jpg" width="300" height="480">
 </div>
 
 + 按下實況中，送出實況中影片訊息
 <div align=center>
-	<img src="img/10.jpg" width="240" height="480">
-	<img src="img/11.jpg" width="240" height="480">
-	<img src="img/12.jpg" width="240" height="480">
-	<img src="img/13.jpg" width="240" height="480">
-	<img src="img/14.jpg" width="240" height="480">
+	<img src="img/10.jpg" width="300" height="480">
+	<img src="img/11.jpg" width="300" height="480">
+	<img src="img/12.jpg" width="300" height="480">
+	<img src="img/13.jpg" width="300" height="480">
+	<img src="img/14.jpg" width="300" height="480">
 </div>
 
 + 按下抽卡進入抽卡模式
 <div align=center>
-	<img src="img/15.jpg" width="240" height="480">
-	<img src="img/16.jpg" width="240" height="480">
-	<img src="img/17.jpg" width="240" height="480">
-	<img src="img/18.jpg" width="240" height="480">
+	<img src="img/15.jpg" width="300" height="480">
+	<img src="img/16.jpg" width="300" height="480">
+	<img src="img/17.jpg" width="300" height="480">
+	<img src="img/18.jpg" width="300" height="480">
 </div>
 
 ### FSM
