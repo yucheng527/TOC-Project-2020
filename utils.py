@@ -306,7 +306,7 @@ def send_living_message(user_id):
         try:
             print(len(lst))
             chrome.get("https://www.youtube.com/channel/"+id[i])
-            WebDriverWait(chrome, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "ytd-thumbnail-overlay-time-status-renderer[class='style-scope ytd-thumbnail']")))
+            WebDriverWait(chrome, 2).until(EC.presence_of_element_located((By.CSS_SELECTOR, "ytd-thumbnail-overlay-time-status-renderer[class='style-scope ytd-thumbnail']")))
             #chrome.implicitly_wait(10)
             #time.sleep(2)
             soup = BeautifulSoup(chrome.page_source, "html.parser")
